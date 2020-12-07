@@ -342,3 +342,4 @@ healthchecksdb
 # Custom
 AttendanceCheck/PutAllAttendanceCsvsHere
 AttendanceCheck/*.xlsx
+AttendanceCheck/StudentList.txt
