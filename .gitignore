@@ -340,6 +340,6 @@ ASALocalRun/
 healthchecksdb
 
 # Custom
-AttendanceCheck/PutAllAttendanceCsvsHere
+AttendanceCheck/PutAllAttendanceCsvsHere/*.csv
 AttendanceCheck/*.xlsx
 AttendanceCheck/StudentList.txt
