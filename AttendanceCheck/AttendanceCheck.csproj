@@ -58,6 +58,7 @@
     <None Include="PutAllAttendanceCsvsHere\meetingAttendanceList.csv" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="PutAllAttendanceCsvsHere\keep_folder.txt" />
     <Content Include="StudentList.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
