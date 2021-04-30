@@ -23,7 +23,7 @@ namespace AttendanceCheck
                 Class active_class = null;
                 foreach (var line in lines)
                 {
-                    if (line.Length == 0 || line[0] == '#') 
+                    if (line.Length == 0 || line[0] == '#')
                         continue;
                     else if (line[0] == '[')
                     {
@@ -41,11 +41,21 @@ namespace AttendanceCheck
                 }
             }
 
+            var csv_folder_path = Path.Combine(project_dir, "PutAllAttendanceCsvsHere");
+            foreach (var dir in new DirectoryInfo(csv_folder_path).EnumerateDirectories())
+            {
+                var input_path = Path.Combine(csv_folder_path, dir.Name);
+                var output_path = Path.Combine(project_dir, $"Närvarolista_WIN20_{dir.Name}.xlsx");
+                PrintAttendanceSheet(input_path, output_path, classes);
+            }
+        }
+
+        static void PrintAttendanceSheet(string input_path, string output_path, List<Class> classes) 
+        {
             // Fetch attendance data
             var total_attendance = new List<Attendance>();
             {
-                var path = Path.Combine(project_dir, "PutAllAttendanceCsvsHere");
-                var dir_info = new DirectoryInfo(path);
+                var dir_info = new DirectoryInfo(input_path);
                 foreach(var file_info in dir_info.GetFiles("*.csv").OrderBy(f => f.LastWriteTime))
                 {
                     var attendance = new Attendance()
@@ -67,8 +77,6 @@ namespace AttendanceCheck
 
             // Print excel result sheet
             {
-                var path = Path.Combine(project_dir, "Närvarolista_WIN20_HTMLCSS.xlsx");
-                
                 // Boot Excel
                 var instance = new Excel.Application();
                 instance.Visible = false;
@@ -106,7 +114,7 @@ namespace AttendanceCheck
                 }
 
                 // Save Excel sheet
-                workbook.SaveAs(path);
+                workbook.SaveAs(output_path);
                 workbook.Close();
                 instance.Quit();
             }
@@ -116,6 +124,7 @@ namespace AttendanceCheck
             worksheet.Cells[row_offset, 1].Value = @class.GroupName;
             worksheet.Cells[row_offset, 1].Interior.TintAndShade = 0.6;
 
+            bool[] somebody_attended = new bool[total_attendance.Count];
             for (int i = 0; i < @class.Names.Count; i++)
             {
                 var row = row_offset + 1 + i;
@@ -130,9 +139,23 @@ namespace AttendanceCheck
                     {
                         attended_days++;
                         worksheet.Cells[row, attendance_col_offset + j] = "X";
+                        worksheet.Cells[row, attendance_col_offset + j].HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                        somebody_attended[j] = true;
                     }
                 }
                 worksheet.Cells[row, attendance_col_offset - 1].Value = attended_days;
+            }
+
+            for (int j = 0; j < total_attendance.Count; j++)
+            {
+                if (!somebody_attended[j])
+                {
+                    Excel.Range big_chunk = worksheet.Range[
+                                                worksheet.Cells[row_offset + 1,                      attendance_col_offset + j],
+                                                worksheet.Cells[row_offset + 1 + @class.Names.Count, attendance_col_offset + j]
+                                            ];
+                    big_chunk.Interior.Color = Excel.XlRgbColor.rgbAzure;
+                }
             }
         }
         class Attendance

@@ -342,3 +342,5 @@ healthchecksdb
 # Custom
 AttendanceCheck/PutAllAttendanceCsvsHere/*.csv
 AttendanceCheck/*.xlsx
+/AttendanceCheck/PutAllAttendanceCsvsHere
+/Närvarolista_WIN20_ASPNET_ambition.xlsx

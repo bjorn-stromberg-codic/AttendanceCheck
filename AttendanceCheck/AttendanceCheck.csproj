@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Närvarolista_WIN20_HTMLCSS.xlsx" />
     <None Include="PutAllAttendanceCsvsHere\meetingAttendanceList %281%29.csv" />
     <None Include="PutAllAttendanceCsvsHere\meetingAttendanceList %282%29.csv" />
     <None Include="PutAllAttendanceCsvsHere\meetingAttendanceList.csv" />
